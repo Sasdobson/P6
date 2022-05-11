@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const userRoutes = require('./routes/UserRoutes')
+const sauceRoutes = require('./routes/SauceRoutes')
 
-const Things = require ('./Models/Things')
 const app = express();
 
 mongoose.connect('mongodb+srv://Sasjojo:...@cluster0.opb4h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
@@ -16,29 +17,11 @@ mongoose.connect('mongodb+srv://Sasjojo:...@cluster0.opb4h.mongodb.net/myFirstDa
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
-
   
 app.use(express.json());
+//app.use('/api/sauce', stuffRoutes);
+app.use('/api/auth', userRoutes); // /api/auth/signup
+app.use('/api/sauce', sauceRoutes);
 
-app.use('/api/sauce', (req, res, next) => {
-  const stuff = [
-    {
-      
-    },
-    {
-     
-    },
-  ];
-  res.status(200).json(stuff);
-});
-
-app.post('/api/sauce', (req, res, next) => {
-  const Things = ({
-    ... req.body
-  })
-  });
-
-app.use('/api/sauce', stuffRoutes);
-app.use('/api/auth', userRoutes);
 
 module.exports = app;
