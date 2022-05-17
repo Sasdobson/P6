@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/UserRoutes')
 const sauceRoutes = require('./routes/SauceRoutes')
+const path = require('path');
 
 const app = express();
 
@@ -20,8 +21,9 @@ mongoose.connect('mongodb+srv://Sasjojo:...@cluster0.opb4h.mongodb.net/myFirstDa
   
 app.use(express.json());
 //app.use('/api/sauce', stuffRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes); // /api/auth/signup
-app.use('/api/sauce', sauceRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 
 module.exports = app;
