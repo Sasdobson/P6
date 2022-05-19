@@ -18,8 +18,6 @@ exports.signup = (req, res, next) => {
 
 
 exports.login = (req, res, next) => {
-    //const cryptedResearchedEmail = cryptojs.HmacSHA256(req.body.email, process.env.EMAIL_KEY).toString();
-
     User.findOne( { email: req.body.email })
         .then(user => {
             if (!user) {
@@ -34,7 +32,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jsonwebtoken.sign(
                             {userId: user._id},
-                            'RANDOM_TOKEN_SECRET',
+                            '4mW6n=;Q{>-8x}f7',
                             {expiresIn: '24h'}
                         )
                     })

@@ -84,3 +84,45 @@ exports.deleteSauce = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 };
+
+exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {
+        //console.log('sauce trouvée !')
+            //req.body.like 1 pour like, -1 pour dislike, 0 pour unlike ou undislike
+        if(req.body.like == 1) {
+            console.log('sauce like !')
+            sauce.likes += 1
+            sauce.usersLiked.push(req.body.userId)
+        }
+        else if(req.body.like == -1) {
+            console.log('sauce dislike !')
+            sauce.dislikes += 1
+            sauce.usersDisliked.push(req.body.userId)
+        }
+        else {
+
+            //console.log(sauce)
+            let indexLikes = sauce.usersLiked.indexOf(req.body.userId)
+            //console.log(indexLikes)
+            if(indexLikes !== -1) { //sauce.usersLiked.includes(req.body.userId)
+                sauce.likes -= 1
+                sauce.usersLiked.splice(indexLikes, 1)
+               // console.log(sauce)
+               // console.log('sauce unlike !')
+
+            }
+
+            let indexDislikes = sauce.usersDisliked.indexOf(req.body.userId)
+            if(indexDislikes !== -1) { //sauce.usersDisliked.includes(req.body.userId)
+                sauce.dislikes -= 1
+                sauce.usersDisliked.splice(indexDislikes, 1)
+                //console.log('sauce undislike !')
+            }
+        }
+        //console.log('save')
+        sauce.save()
+        res.status(200).json(sauce)
+    })
+    .catch(error => res.status(400).json({ error }));
+}
