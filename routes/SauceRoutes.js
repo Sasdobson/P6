@@ -1,16 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-
-// const sauceCtrl = require('../controllers/SauceController');
-
-// router.get('/hello', sauceCtrl.hello);
-
-// /**
-//  * Créer les routes pour lister toutes les sauces. une sauce, supprimer une sauce, mettre à jour une sauce, like / dislike
-//  */
-
-
-// module.exports = router;
 const express = require('express');
 const router = express.Router();
 

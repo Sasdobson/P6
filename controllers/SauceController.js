@@ -1,16 +1,7 @@
-// const Sauce = require('../Models/SauceModel')
-
-
-
-// exports.hello = (req, res, next) => {
-//     res.status(200).json({ bonjour: "hello" })
-// }
-
-// exports.create = (req, res, next) => {
-//     //req.body
-// }
 const Sauce = require('../models/SauceModel');
 const fs = require('fs');
+
+// Affichage des sauces
 
 exports.getAllSauce = (req, res, next) => {
     Sauce.find()
@@ -18,6 +9,7 @@ exports.getAllSauce = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 };
 
+// Affichage d'une sauce 
 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
@@ -25,6 +17,7 @@ exports.getOneSauce = (req, res, next) => {
         .catch(error => res.status(404).json({ error }));
 };
 
+// Creation 
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -42,6 +35,8 @@ exports.createSauce = (req, res, next) => {
             res.status(400).json({ error });
         });
 };
+// Modification 
+
 exports.modifySauce = (req, res, next) => {
     if (req.file) {
         // si l'image est modifiée, il faut supprimer l'ancienne image dans le dossier /image
@@ -69,9 +64,9 @@ exports.modifySauce = (req, res, next) => {
     }
 };
 
-/**
- * SUPPRIMER UNE SAUCE
- */
+
+// Supprimer sauce
+
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
@@ -85,11 +80,12 @@ exports.deleteSauce = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
+// Like et dislikes
+
 exports.likeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
-        //console.log('sauce trouvée !')
-            //req.body.like 1 pour like, -1 pour dislike, 0 pour unlike ou undislike
+
         if(req.body.like == 1) {
             console.log('sauce like !')
             sauce.likes += 1
@@ -102,25 +98,21 @@ exports.likeSauce = (req, res, next) => {
         }
         else {
 
-            //console.log(sauce)
+
             let indexLikes = sauce.usersLiked.indexOf(req.body.userId)
-            //console.log(indexLikes)
-            if(indexLikes !== -1) { //sauce.usersLiked.includes(req.body.userId)
+            if(indexLikes !== -1) { 
                 sauce.likes -= 1
                 sauce.usersLiked.splice(indexLikes, 1)
-               // console.log(sauce)
-               // console.log('sauce unlike !')
-
             }
 
             let indexDislikes = sauce.usersDisliked.indexOf(req.body.userId)
-            if(indexDislikes !== -1) { //sauce.usersDisliked.includes(req.body.userId)
+            if(indexDislikes !== -1) { 
                 sauce.dislikes -= 1
                 sauce.usersDisliked.splice(indexDislikes, 1)
-                //console.log('sauce undislike !')
+                
             }
         }
-        //console.log('save')
+        
         sauce.save()
         res.status(200).json(sauce)
     })
