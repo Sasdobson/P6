@@ -42,6 +42,13 @@ exports.modifySauce = (req, res, next) => {
         // si l'image est modifiée, il faut supprimer l'ancienne image dans le dossier /image
         Sauce.findOne({ _id: req.params.id })
             .then(sauce => {
+                const decodedToken = jwt.verify(token, process.env.JWT);
+    const userId = decodedToken.userId;
+    if (req.body.userId && req.body.userId !== userId) {
+      throw 'Invalid user ID';
+    } else {
+      next();
+    }
                 const filename = sauce.imageUrl.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
                     // une fois que l'ancienne image est supprimée dans le dossier /image, on peut mettre à jour le reste
@@ -85,26 +92,25 @@ exports.deleteSauce = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
-
+//sauce liked
         if(req.body.like == 1) {
-            console.log('sauce like !')
             sauce.likes += 1
             sauce.usersLiked.push(req.body.userId)
         }
+//sauce disliked
         else if(req.body.like == -1) {
-            console.log('sauce dislike !')
             sauce.dislikes += 1
             sauce.usersDisliked.push(req.body.userId)
         }
         else {
 
-
+//Annulation du like
             let indexLikes = sauce.usersLiked.indexOf(req.body.userId)
             if(indexLikes !== -1) { 
                 sauce.likes -= 1
                 sauce.usersLiked.splice(indexLikes, 1)
             }
-
+//Annulation du dislike
             let indexDislikes = sauce.usersDisliked.indexOf(req.body.userId)
             if(indexDislikes !== -1) { 
                 sauce.dislikes -= 1

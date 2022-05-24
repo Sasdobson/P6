@@ -32,7 +32,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jsonwebtoken.sign(
                             {userId: user._id},
-                            '4mW6n=;Q{>-8x}f7',
+                            process.env.JWT,
                             {expiresIn: '24h'}
                         )
                     })
